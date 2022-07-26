@@ -27,13 +27,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = getJwt(request);
-            if (token != null && jwtProvider.validateToken(token)) { //gọi lại hàm validateToken của class JwtTokenFilter
+            if (token != null && jwtProvider.validateToken(token)) {
+                //gọi lại hàm validateToken của class JwtTokenFilter
                 String username = jwtProvider.getUserNameFromJwtToken(token);
                 UserDetails userDetails = userDetailService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken); //xác nhận một lớp trong bảo mật đăng ký xong thì phải save nó lại
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                //xác nhận một lớp trong bảo mật đăng ký xong thì phải save nó lại
             }
         } catch (Exception e) {
             logger.error("Can't set User Authentication -> Message: {}", e);

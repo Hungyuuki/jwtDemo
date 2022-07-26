@@ -1,4 +1,4 @@
-package com.pmhung2.jwtdemo.Config;
+package com.pmhung2.jwtdemo.Config.Security;
 
 import com.pmhung2.jwtdemo.security.jwt.JwtEntryPoint;
 import com.pmhung2.jwtdemo.security.jwt.JwtTokenFilter;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
-@Configuration
+@Configuration //Cái này là để khai báo bean, không có thì không khai báo được
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -46,7 +46,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().and().csrf().disable()
-                .authorizeRequests().antMatchers("/**").permitAll()
+                .authorizeRequests().antMatchers( "/signin","/signup","/signup2")
+                .permitAll()
+                .antMatchers("/admin/**")
+                .access("hasRole('ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and().exceptionHandling()
                 .authenticationEntryPoint(jwtEntryPoint)

@@ -30,6 +30,7 @@ public class Users {
     @Size(min = 3, max = 50)
     private String userName;
     private String password;
+    private String image;
     private String role;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
@@ -46,5 +47,13 @@ public class Users {
         this.userName = userName;
         this.password = encode;
         this.role = role;
+    }
+
+    public Users(String name, String userName, String encode, String role, String imageName) {
+        this.name = name;
+        this.userName = userName;
+        this.password = encode;
+        this.role = role;
+        this.image = imageName;
     }
 }
